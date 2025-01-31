@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Minecraft Clone</title>
+<style>
+body { margin: 0; overflow: hidden; } /* Remove margins and hide scrollbars */
+canvas { display: block; } /* Prevent canvas from creating a small gap */
+</style>
+</head>
+<body>
+
+<canvas id="gameCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const engine = new BABYLON.Engine(canvas, true); // Use Babylon.js engine
+
+// Scene setup
+const scene = new BABYLON.Scene(engine);
+const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+camera.setTarget(BABYLON.Vector3.Zero()); // Look at origin
+camera.attachControl(canvas, true); // Enable camera controls
+
+const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+light.intensity = 0.7;
+
+// Example: Create a ground plane (you'll want to generate terrain)
+const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 50, height: 50, subdivisions: 2}, scene);
+const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
+groundMaterial.diffuseColor = new BABYLON.Color3(0.3, 0.5, 0.2); // Greenish color
+ground.material = groundMaterial;
+
+
+// Example: Add a simple cube (replace with your block system)
+const box = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
+box.position.y = 0.5;  // Place it above the ground.
+const boxMaterial = new BABYLON.StandardMaterial("boxMaterial", scene);
+boxMaterial.diffuseColor = new BABYLON.Color3(0.8, 0.2, 0.2); // Reddish color
+box.material = boxMaterial;
+
+
+// Game loop (render the scene)
+engine.runRenderLoop(function () {
+  scene.render();
+});
+
+// Resize the canvas when the window resizes
+window.addEventListener('resize', function(){
+  engine.resize();
+});
+
+
+// Include Babylon.js library (you'll need to host this or use a CDN)
+// For a production environment, consider using a specific version
+const script = document.createElement('script');
+script.src = 'https://cdn.babylonjs.com/babylon.js'; // Example CDN link
+document.head.appendChild(script);
+
+
+// Add the following *after* the Babylon.js script has loaded:
+script.onload = function() {
+    engine.resize(); // Important: Resize after Babylon loads.
+};
+
+
+</script>
+
+</body>
+</html>
